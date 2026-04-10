@@ -1,0 +1,5 @@
+{
+  "name": "LombardiAI",
+  "description": "A sophisticated AI companion featuring real-time voice and video interaction powered by Gemini.",
+  "requestFramePermissions": ["camera", "microphone"]
+}
