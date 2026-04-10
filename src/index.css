@@ -50,7 +50,6 @@
   @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
 }
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { GoogleGenAI, LiveServerMessage, Modality } from "@google/genai";
 
 export type Message = {
@@ -25,7 +25,14 @@ export function useGeminiLive() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const ai = useMemo(() => {
+    const key = process.env.GEMINI_API_KEY;
+    if (!key || key === 'undefined' || key === 'MY_GEMINI_API_KEY') {
+      console.warn("GEMINI_API_KEY is missing or invalid. Please set it in your environment variables.");
+      return null;
+    }
+    return new GoogleGenAI({ apiKey: key });
+  }, []);
 
   const stopSession = useCallback(() => {
     if (sessionRef.current) {
@@ -92,6 +99,12 @@ export function useGeminiLive() {
     if (isActive || isConnecting) return;
     setIsConnecting(true);
     setError(null);
+
+    if (!ai) {
+      setError("AI Service not initialized. Please check your GEMINI_API_KEY environment variable.");
+      setIsConnecting(false);
+      return;
+    }
 
     try {
       let stream: MediaStream;

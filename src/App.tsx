@@ -31,6 +31,32 @@ export default function App() {
   const [isPreviewPaused, setIsPreviewPaused] = useState(false);
   const [isPreviewMuted, setIsPreviewMuted] = useState(true);
 
+  if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'undefined' || process.env.GEMINI_API_KEY === 'MY_GEMINI_API_KEY') {
+    return (
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center p-8 text-center">
+        <div className="max-w-md space-y-6">
+          <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto border border-red-500/20">
+            <Shield className="w-8 h-8 text-red-500" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-white">Configuration Required</h1>
+          <p className="text-white/40 text-sm leading-relaxed">
+            The <code className="text-blue-400">GEMINI_API_KEY</code> environment variable is missing or invalid. 
+            Please set it in your Netlify environment variables to enable the AI features.
+          </p>
+          <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-left">
+            <p className="text-[10px] font-mono uppercase tracking-widest text-white/30 mb-2">Instructions</p>
+            <ol className="text-xs text-white/60 space-y-2 list-decimal ml-4">
+              <li>Go to your Netlify Site Settings</li>
+              <li>Navigate to Environment Variables</li>
+              <li>Add <code className="text-blue-400">GEMINI_API_KEY</code> with your Gemini API key</li>
+              <li>Trigger a new deploy</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   useEffect(() => {
     if (videoRef.current) {
       if (isPreviewPaused) {
